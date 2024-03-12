@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-
 const BusinessOwnerDetails = ({ formData, setFormData }) => {
   const handleChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));

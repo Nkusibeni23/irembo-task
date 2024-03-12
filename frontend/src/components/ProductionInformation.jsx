@@ -1,7 +1,17 @@
 /* eslint-disable react/prop-types */
+
+import { useState } from "react";
+
 const ProductionInformation = ({ formData, setFormData }) => {
+  const [otherPurpose, setOtherPurpose] = useState(false);
+
   const handleChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
+  };
+
+  const handlePurposeChange = (value) => {
+    setOtherPurpose(value === "Other");
+    handleChange("importationPurpose", value);
   };
 
   return (
@@ -15,7 +25,7 @@ const ProductionInformation = ({ formData, setFormData }) => {
         <select
           className="mt-1 p-2 border rounded w-full"
           value={formData.importationPurpose || ""}
-          onChange={(e) => handleChange("importationPurpose", e.target.value)}
+          onChange={(e) => handlePurposeChange(e.target.value)}
         >
           <option value="">Select Purpose of Importation</option>
           <option value="Direct sale">Direct sale</option>
@@ -28,7 +38,7 @@ const ProductionInformation = ({ formData, setFormData }) => {
         )}
       </div>
 
-      {formData.importationPurpose === "Other" && (
+      {otherPurpose && (
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
             Specify Purpose of Importation
@@ -91,6 +101,7 @@ const ProductionInformation = ({ formData, setFormData }) => {
           value={formData.productWeight || ""}
           onChange={(e) => handleChange("productWeight", e.target.value)}
         />
+        {/* Add validation for weight if needed */}
       </div>
 
       <div className="mb-4">
@@ -135,6 +146,15 @@ const ProductionInformation = ({ formData, setFormData }) => {
           value={formData.productQuantity || ""}
           onChange={(e) => handleChange("productQuantity", e.target.value)}
         />
+        {formData.productQuantity === "" && (
+          <p className="text-red-500">This field is required</p>
+        )}
+        {formData.productQuantity !== "" &&
+          parseFloat(formData.productQuantity) <= 0 && (
+            <p className="text-red-500">
+              Please provide a number greater than zero
+            </p>
+          )}
       </div>
     </div>
   );
